@@ -1,0 +1,6 @@
+bot/setfit_intent_model/*
+bot/flutter_assets/*
+checkpoints/*
+fine_tuned_mobilebert/*
+results/*
+__pycache__/*

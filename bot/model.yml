@@ -1,0 +1,9 @@
+model:
+  base_model: "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+  
+training_arguments:
+  num_epochs: 1
+  batch_size: 16
+  use_amp: true
+  num_iterations: 20
+  learning_rate: 0.00002
