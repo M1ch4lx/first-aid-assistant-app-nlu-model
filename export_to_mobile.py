@@ -10,18 +10,15 @@ from setfit.exporters.onnx import export_onnx
 def export_project():
     print("--- Rozpoczynanie profesjonalnego eksportu SetFit do ONNX ---")
     
-    # 1. Inicjalizacja bota, aby pobrać model
     bot = FirstAidBot()
     if not bot.model:
         print("BŁĄD: Nie znaleziono wytrenowanego modelu! Uruchom 'train'.")
         return
 
-    # 2. Tworzenie folderu eksportu
     export_folder = os.path.join(BASE_PATH, "flutter_assets")
     if not os.path.exists(export_folder):
         os.makedirs(export_folder)
 
-    # 3. Eksport modelu do JEDNEGO pliku ONNX (Body + Head)
     output_onnx_path = os.path.join(export_folder, "model.onnx")
     export_onnx(
         bot.model.model_body,
@@ -31,7 +28,6 @@ def export_project():
     )
     print(f"Sukces! Pełny model wyeksportowany do: {output_onnx_path}")
 
-    # 4. Kopiowanie plików tokenizera (niezbędne dla Fluttera)
     tokenizer_files = ["tokenizer.json", "tokenizer_config.json", "special_tokens_map.json", "vocab.txt"]
     for file_name in tokenizer_files:
         src = os.path.join(MODEL_SAVE_PATH, file_name)
@@ -39,7 +35,6 @@ def export_project():
             shutil.copy(src, export_folder)
             print(f"Skopiowano plik tokenizera: {file_name}")
 
-    # 5. Eksport labels.json i app_config.yml
     label_config = {i: intent for i, intent in enumerate(bot.model.labels)}
     with open(os.path.join(export_folder, "labels.json"), 'w', encoding='utf-8') as f:
         json.dump(label_config, f, ensure_ascii=False, indent=2)

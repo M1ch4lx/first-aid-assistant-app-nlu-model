@@ -4,7 +4,6 @@ from pydantic import BaseModel
 from run_bot import FirstAidBot
 from fastapi.middleware.cors import CORSMiddleware
 
-# Definicja struktury zapytania
 class Query(BaseModel):
     text: str
 

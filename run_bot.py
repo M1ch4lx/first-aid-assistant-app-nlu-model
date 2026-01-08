@@ -22,14 +22,10 @@ class FirstAidBot:
         if not self.model:
             return "MODEL_NOT_TRAINED", 0.0
         
-        # predict_proba dla Torch Head zwraca Tensor
         probs = self.model.predict_proba([text])[0]
         
-        # predict zwraca nazwę intencji (string) lub ID
         intent = self.model.predict([text])[0]
         
-        # Dodajemy .cpu() na wypadek, gdybyś trenował na GPU (CUDA)
-        # .item() zadziała, jeśli wynikiem jest pojedyncza wartość
         score = float(probs.max()) 
         
         return intent, score
