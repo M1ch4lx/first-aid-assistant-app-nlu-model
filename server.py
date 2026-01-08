@@ -1,8 +1,10 @@
 import uvicorn
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
 from run_bot import FirstAidBot
 from fastapi.middleware.cors import CORSMiddleware
+from setfit import SetFitModel
+from common import MODEL_SAVE_PATH, FLOW_CONFIG_PATH
 
 class Query(BaseModel):
     text: str
@@ -17,27 +19,82 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-bot = None
+# ----- Współdzielony model NLU -----
+nlu_model = None
 
-def get_bot():
-    global bot
-    if bot is None:
-        bot = FirstAidBot()
-    return bot
+def get_nlu_model():
+    global nlu_model
+    if nlu_model is None:
+        nlu_model = SetFitModel.from_pretrained(MODEL_SAVE_PATH, fix_mistral_regex=True)
+        print(f"Wczytano wytrenowany model z {MODEL_SAVE_PATH}")
+    return nlu_model
 
+# ----- Menedżer połączeń WebSocket -----
+class ConnectionManager:
+    def __init__(self):
+        # każda sesja ma własnego FirstAidBot, ale korzysta ze współdzielonego modelu
+        self.active_connections: dict[WebSocket, FirstAidBot] = {}
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        # Tworzymy nowego bota dla tej sesji, przekazując współdzielony model
+        bot = FirstAidBot(model=get_nlu_model())
+        self.active_connections[websocket] = bot
+        # Od razu wysyłamy startową wiadomość w standardowym formacie
+        start_actions = bot.start_conversation()
+        for act in start_actions:
+            await websocket.send_json({
+                "user": "",
+                "message": act["message"],
+                "display": act["display"],
+                "special": act["special"]
+            })
+
+    def disconnect(self, websocket: WebSocket):
+        if websocket in self.active_connections:
+            del self.active_connections[websocket]
+
+    async def handle_message(self, websocket: WebSocket, message: str):
+        bot = self.active_connections[websocket]
+        reply_actions, intent, score = bot.process_input(message)
+        for act in reply_actions:
+            await websocket.send_json({
+                "user": message,
+                "message": act["message"],
+                "display": act["display"],
+                "special": act["special"]
+            })
+
+manager = ConnectionManager()
+
+# ----- Endpoint WebSocket -----
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await manager.connect(websocket)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            await manager.handle_message(websocket, data)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+
+# ----- Endpoint NLU REST -----
 @app.post("/predict")
 async def predict(query: Query):
     if not query.text:
         raise HTTPException(status_code=400, detail="Brak tekstu do analizy")
-    
-    current_bot = get_bot()
-    if not current_bot.model:
+
+    model = get_nlu_model()
+    if model is None:
         raise HTTPException(status_code=500, detail="Model nie został zainicjalizowany")
-    
-    intent, score = current_bot.get_intent(query.text)
+
+    probs = model.predict_proba([query.text])[0]
+    intent = model.predict([query.text])[0]
+    score = float(probs.max())
+
     return {
         "intent": intent,
-        "confidence": float(score)
+        "confidence": score
     }
 
 def start_server():

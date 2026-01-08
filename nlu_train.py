@@ -31,7 +31,7 @@ def load_nlu_from_yaml(file_path):
 def train():
     model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 
-    print(f"--- Przygotowanie treningu (Nowy API Trainer) dla: {model_name} ---")
+    print(f"--- Szybki trening (Logistic Regression Head) dla: {model_name} ---")
     
     df = load_nlu_from_yaml(NLU_DATA_PATH)
     unique_intents = sorted(df['intent'].unique())
@@ -48,18 +48,16 @@ def train():
     model = SetFitModel.from_pretrained(
         model_name,
         labels=unique_intents,
-        use_differentiable_head=True,
-        head_params={"out_features": len(unique_intents)},
+        use_differentiable_head=False, 
         fix_mistral_regex=True
     )
 
     args = TrainingArguments(
-        batch_size=(16, 16),      # (embeddingi, głowica)
-        num_epochs=(3, 10),      # (embeddingi, głowica) - głowica potrzebuje więcej epok!
-        body_learning_rate=(2e-5, 1e-5), 
-        head_learning_rate=1e-2,
-        end_to_end=True,         # Pozwala na douczanie body podczas treningu głowicy
-        l2_weight=0.01,
+        batch_size=16,
+        num_epochs=1,
+        num_iterations=20,
+        body_learning_rate=2e-5,
+        end_to_end=False,
         evaluation_strategy="epoch",
         save_strategy="epoch",
         load_best_model_at_end=True
@@ -73,7 +71,7 @@ def train():
         column_mapping={"text": "text", "label": "label"} 
     )
 
-    print("Rozpoczynam dwufazowy trening...")
+    print("Rozpoczynam szybki trening kontrastowy...")
     trainer.train()
 
     print("\n--- Ewaluacja na zbiorze testowym ---")

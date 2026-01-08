@@ -70,7 +70,51 @@ rules:
     - action: ask_safety
     - intent: CONFIRMATION
     - action: ask_breathing
+    - switch:
+      - case: CONFIRMATION
+        goto: breathing_unconscious
+      - case: DENIAL
+        goto: no_breathing_detected
 
+  - rule: breathing_unconscious
+    steps:
+    - intent: UNCONSCIOUS_BUT_BREATHING
+    - action: instruct_recovery_position
+    - any:
+      - intent: CONFIRMATION
+      - intent: WHAT_NEXT
+    - action: recovery_position_step_1
+    - any:
+      - intent: CONFIRMATION
+      - intent: WHAT_NEXT
+    - action: recovery_position_step_2
+    - any:
+      - intent: CONFIRMATION
+      - intent: WHAT_NEXT
+    - action: recovery_position_step_3
+    - any:
+      - intent: CONFIRMATION
+      - intent: WHAT_NEXT
+    - action: recovery_position_step_4
+    - any:
+      - intent: CONFIRMATION
+      - intent: WHAT_NEXT
+    - action: recovery_position_step_5
+    - any:
+      - intent: CONFIRMATION
+      - intent: WHAT_NEXT
+    - action: recovery_position_step_6
+    - any:
+      - intent: CONFIRMATION
+      - intent: WHAT_NEXT
+    - action: recovery_position_step_7
+    - any:
+      - intent: CONFIRMATION
+      - intent: WHAT_NEXT
+    - action: tell_to_call_ambulance
+    - intent: CONFIRMATION
+    - action: call_emergency_number
+  
   - rule: no_breathing_detected
     steps:
     - intent: SITUATION_NOT_BREATHING
@@ -93,11 +137,6 @@ rules:
     steps:
     - intent: QUANTITY_ASK
     - action: answer_cpr_details
-
-  - rule: user_needs_repetition
-    steps:
-    - intent: REPEAT
-    - action: repeat
 
   - rule: user_panicking
     steps:

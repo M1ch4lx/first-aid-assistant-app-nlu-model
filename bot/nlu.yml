@@ -52,9 +52,28 @@ nlu:
     - "Rana jest głęboka i mocno przesiąka krwią"
     - "Krew przesiąka przez założony bandaż"
 
+- intent: WHAT_NEXT
+  examples: |
+    - "co dalej"
+    - "co mam teraz zrobić"
+    - "co teraz"
+    - "następny krok"
+    - "co teraz robić"
+    - "co dalej robić"
+    - "kontynuuj"
+    - "kolejny krok"
+    - "co zrobić teraz"
+    - "podaj następny krok"
+
 - intent: CONFIRMATION
   examples: |
     - "Tak"
+    - "Tak, czuję oddech"
+    - "Tak, oddycha"
+    - "Widzę oddech"
+    - "Czuję oddech"
+    - "Jest bezpiecznie"
+    - "Tak, jest bezpiecznie"
     - "Zrobiłem to"
     - "Gotowe"
     - "Już sprawdziłem"
@@ -64,6 +83,31 @@ nlu:
     - "Tak, już to zrobiłem"
     - "W porządku, zrobiłem jak mówiłeś"
     - "Dobrze, wykonane"
+
+- intent: DENIAL
+  examples: |
+    - "Nie"
+    - "Nie, nie oddycha"
+    - "Nie widzę oddechu"
+    - "Nie czuję oddechu"
+    - "Nie, nie jest bezpiecznie"
+    - "Jeszcze tego nie zrobiłem"
+    - "Nie, jeszcze nie"
+    - "Nie, nie sprawdziłem"
+    - "Nie czuje"
+    - "Nie widzę"
+    - "Nie ma"
+    - "Nie jest"
+
+- intent: UNCONSCIOUS_BUT_BREATHING
+  examples: |
+    - "On jest nieprzytomny ale oddycha normalnie"
+    - "Widzę nieprzytomnego mężczyznę który oddycha"
+    - "Czuję oddech u tej nieprzytomnej osoby"
+    - "Ma prawidłowy oddech mimo utraty przytomności"
+    - "Poszkodowany jest nieprzytomny ale wykonuje spokojne wdechy i wydechy"
+    - "Leży na ziemii, nie ma z nim kontaktu, widzę że oddycha"
+    - "Jest nieprzytomny ale czuję jego oddech"
 
 - intent: SITUATION_BURN
   examples: |
@@ -127,21 +171,6 @@ nlu:
     'Czuję że oddycha'
     'On ma prawidłowy oddech pomimo że jest nieprzytomny'
 
-- intent: ASSESS_SAFETY
-  examples: |
-    - "Czy jest tu teraz bezpiecznie dla mnie jako ratownika"
-    - "Czy mogę do niego podejść bez ryzyka dla zdrowia"
-    - "Jak ocenić bezpieczeństwo poszkodowanego i swoje własne"
-    - "Jak zabezpieczyć miejsce tego niebezpiecznego zdarzenia"
-    - "Czy to miejsce jest groźne dla osoby udzielającej pomocy"
-    - "Sprawdź czy mi nic nie grozi przy tym wypadku"
-    - "Czy muszę go ewakuować w jakieś bezpieczniejsze miejsce"
-    - "Co z moim bezpieczeństwem podczas przeprowadzania akcji"
-    - "Czy otoczenie jest bezpieczne dla udzielającego pierwszej pomocy"
-    - "Czy mogę bezpiecznie zacząć pomagać temu poszkodowanemu"
-    - "Jak upewnić się że nic mi nie grozi podczas pomagania"
-    - "Sprawdź czy miejsce nie jest niebezpieczne dla ciebie"
-
 - intent: ASSESS_CONSCIOUSNESS
   examples: |
     - "Jak sprawdzić czy on jeszcze żyje i czy reaguje"
@@ -157,25 +186,6 @@ nlu:
     - "W jaki sposób wywołać reakcję u osoby nieprzytomnej"
     - "Zapytaj go co się stało żeby ocenić przytomność"
     - "Sprawdź czy poszkodowany cię słyszy i reaguje"
-
-- intent: ASSESS_BREATHING
-  examples: |
-    - "Nie jestem pewien czy on w ogóle jeszcze oddycha"
-    - "Jak poprawnie sprawdzić oddech u osoby poszkodowanej"
-    - "Jak udrożnić drogi oddechowe przez odgięcie jego głowy"
-    - "Udrożnij mu gardło kładąc rękę na czole oraz na brodzie"
-    - "Przystaw policzek i sprawdź czy czujesz wydychane powietrze"
-    - "Odegnij jego głowę mocno do tyłu udrażniając drogi"
-    - "Czy widzisz ruchy klatki piersiowej świadczące o oddychaniu"
-    - "Przystaw policzek do twarzy poszkodowanego słuchając wydechu"
-    - "Słuchaj i czuj czy ten poszkodowany faktycznie oddycha"
-    - "Jak prawidłowo odchylić głowę ratując kogoś nieprzytomnego"
-    - "Sprawdź czy klatka piersiowa porusza się przy oddychaniu"
-    - "Przystaw policzek do ust poszkodowanego na dziesięć sekund"
-    - "Jak prawidłowo odchylić żuchwę żeby sprawdzić przepływ powietrza"
-    - "Odchyl żuchwę poszkodowanego i sprawdź czy oddycha"
-    - "W jakiej pozycji najlepiej sprawdzać czy on oddycha"
-    - "Badanie oddechu - jaka pozycja głowy"
 
 - intent: PROCEDURE_CPR
   examples: |
@@ -275,19 +285,6 @@ nlu:
     - "Zawołaj jakąś inną osobę do pomocy przy tym ratowaniu"
     - "Potrzebna jest natychmiastowa pomoc specjalistów lekarzy"
     - "Niech ktoś bardzo szybko zadzwoni po karetkę pogotowia"
-
-- intent: WHAT_NEXT
-  examples: |
-    - "Co mam dalej robić w tej konkretnej sytuacji"
-    - "Zrobiłem to co kazałeś i co mam zrobić teraz"
-    - "Jaki jest następny krok tej całej procedury ratunkowej"
-    - "I co mam zrobić potem z tym poszkodowanym człowiekiem"
-    - "Co mam teraz robić konkretnie zaraz po uciśnięciach"
-    - "Kontynuuj podawanie kolejnych instrukcji krok po kroku"
-    - "Co jeszcze mogę teraz zrobić żeby mu pomóc przeżyć"
-    - "Podaj mi proszę następne zadanie do wykonania"
-    - "Co mam dalej robić czekając aż przyjedzie karetka"
-    - "Przejdź do kolejnego ważnego kroku pomocy przedmedycznej"
 
 - intent: REPEAT
   examples: |
