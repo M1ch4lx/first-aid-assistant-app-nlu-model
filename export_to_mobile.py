@@ -8,7 +8,7 @@ import shutil
 from setfit.exporters.onnx import export_onnx
 
 def export_project():
-    print("--- Rozpoczynanie profesjonalnego eksportu SetFit do ONNX ---")
+    print("--- Rozpoczynanie eksportu SetFit do ONNX ---")
     
     bot = FirstAidBot()
     if not bot.model:
@@ -44,4 +44,4 @@ def export_project():
     with open(os.path.join(export_folder, "app_config.yml"), 'w', encoding='utf-8') as f:
         yaml.dump(flow_data, f, allow_unicode=True, sort_keys=False)
 
-    print("\n--- Eksport zakończony! Folder 'flutter_assets' jest gotowy do wgrania do projektu. ---")
+    print("\n--- Eksport zakończony ---")

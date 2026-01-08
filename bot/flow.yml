@@ -4,24 +4,59 @@ actions:
     display: "Co się stało?"
 
   - action: ask_safety
-    message: "Zanim podejdziesz, upewnij się, że miejsce jest bezpieczne (ruch uliczny, prąd, dym). Czy możesz bezpiecznie pomóc?"
+    message: "Zanim podejdziesz, upewnij się, że miejsce jest bezpieczne"
 
   - action: ask_consciousness
     message: "Podejdź do poszkodowanego. Głośno zawołaj i delikatnie potrząśnij za ramiona. Czy reaguje?"
 
+  - action: ask_breathing
+    message: "Sprawdź czy poszkodowany oddycha, przyłóż swoje ucho blisko jego ust i nosa, jednocześnie patrząc na klatkę piersiową. Czy czujesz jego oddech albo widzisz ruch klatki piersiowej?"
+
   - action: instruct_cpr
-    message: "Rozpocznij reanimację: połóż splecione dłonie na środku klatki piersiowej. Uciskaj mocno 30 razy, a potem wykonaj 2 oddechy ratownicze. Czy wiesz jak to robić?"
+    message: "Rozpocznij reanimację, ułóż poszkodowanego na plecach, połóż splecione dłonie na środku klatki piersiowej. Uciskaj mocno 30 razy, a potem wykonaj 2 oddechy ratownicze. Powtarzaj aż do przybycia pogotowia. Uruchomię teraz metronom, dopasuj do niego szybkość uciśnięć."
+    display: "30 uciśnięć i 2 oddechy"
 
   - action: instruct_recovery_position
-    message: "Ułóż poszkodowanego w pozycji bocznej bezpiecznej. Monitoruj oddech do przyjazdu karetki."
+    message: "Ułóż poszkodowanego w pozycji bocznej bezpiecznej. Monitoruj oddech do przyjazdu karetki. Mam cię poprowadzić jak to zrobć?"
+
+  - action: recovery_position_step_1
+    message: "Ułóż poszkodowanego na plecach, upewnij się czy poszkodowany ma wyprostowane nogi i siądź przy nim od tej strony na którą będziesz chciał go obrócić"
+
+  - action: recovery_position_step_2
+    message: "Rękę z Twojej strony ułóż pod kątem prostym w stosunku do ciała, a następnie zegnij do góry w łokciu pod kątem prostym tak, aby dłoń ręki była skierowana do góry"
+
+  - action: recovery_position_step_3
+    message: "Drugą rękę przełóż w poprzek klatki piersiowej i ułóż dłonią w kierunku twarzy, tak aby jej zewnętrzna część dotykała brody od Twojej strony"
+
+  - action: recovery_position_step_4
+    message: "Drugą swoją ręką złap za dalszą kończynę dolną, noga od drugiej strony tuż powyżej kolana i podciągnij ją ku górze, nie odrywając stopy od podłoża"
+
+  - action: recovery_position_step_5
+    message: "Przytrzymując jedną ręką dłoń dociśniętą do policzka, drugą ręką - pociągnij za dalszą kończynę dolną tak, by poszkodowany obrócił się na bok w Twoim kierunku."
+
+  - action: recovery_position_step_6
+    message: "Ułóż kończynę, za którą pociągnąłeś poszkodowanego w ten sposób, zarówno staw kolanowy jak i biodrowy były zgięte pod kątem prostym"
+
+  - action: recovery_position_step_7
+    message: "Odchyl lekko do tyłu głowę poszkodowanego, aby udrożnić drogi oddechowe"
+
+  - action: tell_to_call_ambulance
+    message: "Jeśli jeszcze tego nie zrobiłeś, zadzwoń na numer alarmowy albo kogoś o to poproś. Jeśli chcesz mogę rozpocząć połączenie."
 
   - action: answer_cpr_details
-    message: "Wykonuj 30 uciśnięć (tempo 100-120/min, głębokość 5-6 cm) i 2 oddechy ratownicze. Powtarzaj ten cykl bez przerwy."
+    message: "30 ucisków i po nich 2 oddechy ratownicze"
 
-  - action: repeat
+  # == Special actions - these actions trigger specific flows or functionalities ==
+  - action: repeat # repeat last voice message
 
-  - action: handle_panic
-    message: "Spokojnie, pomogę Ci. Weź głęboki oddech. Najpierw powiedz: czy miejsce wokół Ciebie jest bezpieczne?"
+  - action: start_cpr_pacer # start CPR pacer metronome
+
+  - action: tell_location # tell current user location
+
+  - action: call_emergency_number # call emergency number
+
+  - action: handle_panic # help user to calm down
+    message: "Spokojnie, pomogę Ci. Weź głęboki oddech. Najpierw powiedz, czy miejsce wokół Ciebie jest bezpieczne?"
 
 rules:
   - rule: start_conversation
@@ -33,21 +68,26 @@ rules:
     steps:
     - intent: SITUATION_UNCONSCIOUS
     - action: ask_safety
-
-  - rule: safety_confirmed
-    steps:
-    - intent: ASSESS_SAFETY
-    - action: ask_consciousness
+    - intent: CONFIRMATION
+    - action: ask_breathing
 
   - rule: no_breathing_detected
     steps:
     - intent: SITUATION_NOT_BREATHING
     - action: instruct_cpr
+    - action: start_cpr_pacer
+    - action: tell_to_call_ambulance
+    - intent: CONFIRMATION
+    - action: call_emergency_number
 
   - rule: procedure_cpr_trigger
     steps:
     - intent: PROCEDURE_CPR
     - action: instruct_cpr
+    - action: start_cpr_pacer
+    - action: tell_to_call_ambulance
+    - intent: CONFIRMATION
+    - action: call_emergency_number
 
   - rule: ask_how_many_cpr
     steps:
@@ -63,3 +103,8 @@ rules:
     steps:
     - intent: DONT_KNOW_WHAT_TO_DO
     - action: handle_panic
+
+  - rule: user_asks_location
+    steps:
+    - intent: ASK_LOCATION
+    - action: tell_location

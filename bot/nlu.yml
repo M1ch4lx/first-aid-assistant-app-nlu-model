@@ -52,6 +52,19 @@ nlu:
     - "Rana jest głęboka i mocno przesiąka krwią"
     - "Krew przesiąka przez założony bandaż"
 
+- intent: CONFIRMATION
+  examples: |
+    - "Tak"
+    - "Zrobiłem to"
+    - "Gotowe"
+    - "Już sprawdziłem"
+    - "Upewniłem się, że jest bezpiecznie"
+    - "Tak, oddycha"
+    - "Nie, nie oddycha"
+    - "Tak, już to zrobiłem"
+    - "W porządku, zrobiłem jak mówiłeś"
+    - "Dobrze, wykonane"
+
 - intent: SITUATION_BURN
   examples: |
     - "Oparzył się wrzątkiem prosto z czajnika"
@@ -104,6 +117,15 @@ nlu:
     - "Nie widzę ruchów klatki piersiowej ani brzucha przy oddychaniu"
     - "On jest nieprzytomny i kompletnie nie oddycha"
     - "Brak jakichkolwiek oznak życia w postaci oddechu"
+
+- intent: SITUATION_BREATHING
+  examples: |
+    'On oddycha normalnie mimo utraty przytomności'
+    'Widzę ruchy klatki piersiowej przy oddychaniu'
+    'Poszkodowany wykonuje spokojne wdechy i wydechy'
+    'Czuję oddech'
+    'Czuję że oddycha'
+    'On ma prawidłowy oddech pomimo że jest nieprzytomny'
 
 - intent: ASSESS_SAFETY
   examples: |
@@ -303,19 +325,6 @@ nlu:
     - "Ile uciśnięć przypada na dwa oddechy ratownicze"
     - "Jak głęboko w centymetrach mam uciskać klatkę u dziecka"
 
-- intent: LOCATION_AED
-  examples: |
-    - "Gdzie znajdę automatyczny defibrylator zewnętrzny AED"
-    - "Gdzie mam szukać defibrylatora w mojej okolicy"
-    - "Skąd wziąć profesjonalny sprzęt do defibrylacji serca"
-    - "Czy tu w tym budynku użyteczności publicznej jest AED"
-    - "Gdzie w biurowcach lub na dużych dworcach szukać AED"
-    - "Gdzie znajduje się najbliższy automatyczny defibrylator"
-    - "W jakim urzędzie lub na którym lotnisku znajdę sprzęt AED"
-    - "Gdzie szukać urządzenia służącego do automatycznej reanimacji"
-    - "Skąd wziąć defibrylator zewnętrzny w razie nagłego wypadku"
-    - "Defibrylator AED gdzie go szukać w pobliżu tego miejsca"
-
 - intent: DONT_KNOW_WHAT_TO_DO
   examples: |
     - "Nie wiem co mam teraz robić w tej strasznej sytuacji"
@@ -332,3 +341,18 @@ nlu:
     - "Strasznie panikuję w tej sytuacji i nic nie pamiętam"
     - "Jestem przerażony i nie potrafię sam podjąć działania"
     - "Pomóż mi bo nie radzę sobie ze stresem przy wypadku"
+
+- intent: ASK_LOCATION
+  examples: |
+    - "Na jakiej ulicy jestem"
+    - "Jaki to jest adres"
+    - "Gdzie teraz jestem"
+    - "Podaj moją aktualną lokalizację"
+    - "Gdzie dokładnie się znajduję"
+    - "Powiedz mi gdzie jestem"
+    - "Jaka jest moja pozycja"
+    - "Gdzie się teraz znajduję na mapie"
+    - "Pokaż gdzie jestem w tej chwili"
+    - "Jaka jest moja lokalizacja GPS"
+    - "W jakim miejscu się znajduję"
+    - "Podaj moje współrzędne lub adres"
