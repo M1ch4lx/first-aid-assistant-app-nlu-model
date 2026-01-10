@@ -46,6 +46,9 @@ actions:
   - action: answer_cpr_details
     message: "30 ucisków i po nich 2 oddechy ratownicze"
 
+  - action: handle_panic # help user to calm down
+    message: "Spokojnie, pomogę Ci. Weź głęboki oddech. Najpierw powiedz, czy miejsce wokół Ciebie jest bezpieczne?"
+
   # == Special actions - these actions trigger specific flows or functionalities ==
   - action: repeat # repeat last voice message
 
@@ -54,9 +57,6 @@ actions:
   - action: tell_location # tell current user location
 
   - action: call_emergency_number # call emergency number
-
-  - action: handle_panic # help user to calm down
-    message: "Spokojnie, pomogę Ci. Weź głęboki oddech. Najpierw powiedz, czy miejsce wokół Ciebie jest bezpieczne?"
 
 rules:
   - rule: start_conversation
