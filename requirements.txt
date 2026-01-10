@@ -1,0 +1,18 @@
+# Web Server & API
+fastapi
+uvicorn[standard]
+pydantic
+python-multipart
+
+# AI / Machine Learning (NLU)
+setfit
+sentence-transformers
+datasets
+scikit-learn
+onnx
+onnxruntime
+
+# Data Processing & Utils
+pandas
+pyyaml
+matplotlib

@@ -1,15 +1,15 @@
 import uvicorn
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
-from run_bot import FirstAidBot
+from run_bot import DialogueControl
 from fastapi.middleware.cors import CORSMiddleware
 from setfit import SetFitModel
-from common import MODEL_SAVE_PATH, FLOW_CONFIG_PATH
+from common import MODEL_SAVE_PATH
 
 class Query(BaseModel):
     text: str
 
-app = FastAPI(title="First Aid Assistant API")
+app = FastAPI(title="Conversational Bot API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -19,7 +19,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ----- Współdzielony model NLU -----
 nlu_model = None
 
 def get_nlu_model():
@@ -29,18 +28,14 @@ def get_nlu_model():
         print(f"Wczytano wytrenowany model z {MODEL_SAVE_PATH}")
     return nlu_model
 
-# ----- Menedżer połączeń WebSocket -----
 class ConnectionManager:
     def __init__(self):
-        # każda sesja ma własnego FirstAidBot, ale korzysta ze współdzielonego modelu
-        self.active_connections: dict[WebSocket, FirstAidBot] = {}
+        self.active_connections: dict[WebSocket, DialogueControl] = {}
 
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
-        # Tworzymy nowego bota dla tej sesji, przekazując współdzielony model
-        bot = FirstAidBot(model=get_nlu_model())
+        bot = DialogueControl(model=get_nlu_model())
         self.active_connections[websocket] = bot
-        # Od razu wysyłamy startową wiadomość w standardowym formacie
         start_actions = bot.start_conversation()
         for act in start_actions:
             await websocket.send_json({
@@ -67,7 +62,6 @@ class ConnectionManager:
 
 manager = ConnectionManager()
 
-# ----- Endpoint WebSocket -----
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
@@ -78,7 +72,6 @@ async def websocket_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 
-# ----- Endpoint NLU REST -----
 @app.post("/predict")
 async def predict(query: Query):
     if not query.text:

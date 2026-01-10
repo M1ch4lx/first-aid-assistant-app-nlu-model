@@ -24,7 +24,7 @@ def init_project():
             "nlu": [
                 {
                     "intent": "GREET",
-                    "examples": "- \"Hello\"\n- \"Hi\"\n- \"How are you\"\n"
+                    "examples": "Cześć"
                 }
             ]
         },
@@ -60,4 +60,4 @@ def init_project():
             yaml.dump(content, f, allow_unicode=True, sort_keys=False)
         print(f"Utworzono plik: {path}")
 
-    print("\n--- Inicjalizacja zakończona sukcesem! ---")
+    print(f"\nInicjalizacja zakończona, katalog roboczy {BASE_PATH}")

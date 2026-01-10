@@ -3,7 +3,7 @@ from setfit import SetFitModel
 from common import MODEL_SAVE_PATH, FLOW_CONFIG_PATH
 
 
-class FirstAidBot:
+class DialogueControl:
     def __init__(self, model_path=MODEL_SAVE_PATH, flow_path=FLOW_CONFIG_PATH, model=None):
         try:
             if model is not None:
@@ -13,7 +13,7 @@ class FirstAidBot:
                 print(f"Wczytano wytrenowany model z {model_path}")
         except Exception:
             self.model = None
-            print("Uwaga: Nie znaleziono wytrenowanego modelu. Użyj 'train'.")
+            print("Nie znaleziono wytrenowanego modelu. Użyj 'train'.")
         
         with open(flow_path, 'r', encoding='utf-8') as f:
             self.flow = yaml.safe_load(f)
@@ -24,7 +24,6 @@ class FirstAidBot:
         self.current_step = 0
         self.last_message = None
 
-    # ---- INTENT ----
     def get_intent(self, text):
         if not self.model:
             return "MODEL_NOT_TRAINED", 0.0
@@ -34,7 +33,6 @@ class FirstAidBot:
         score = float(probs.max())
         return intent, score
 
-    # ---- HELPERY FLOW ----
     def _find_rule_for_intent(self, intent):
         for rule in self.rules:
             for step in rule["steps"]:
@@ -64,7 +62,6 @@ class FirstAidBot:
                 goto_rule = step["goto"]
                 break
             elif "intent" in step or "any" in step:
-                # kończymy, bo czekamy na nowy intent
                 break
 
         return actions, goto_rule
@@ -73,7 +70,6 @@ class FirstAidBot:
         if not action_data:
             return {"message": "(brak akcji)", "display": "", "special": False}
         
-        # Sprawdzenie czy to akcja specjalna (nie ma message)
         special = "message" not in action_data
 
         message = action_data.get("message", action_data.get("action", ""))
@@ -102,13 +98,11 @@ class FirstAidBot:
         first_intent_index = next((i for i, s in enumerate(steps) if "intent" in s or "any" in s), 0)
 
         output = []
-        # Wykonujemy akcje przed pierwszym intentem/any
         for i in range(first_intent_index):
             step = steps[i]
             if "action" in step:
                 output.extend(self._execute_actions([step["action"]]))
 
-        # Następnie wykonujemy akcje po pierwszym intent/any (jeśli są)
         actions, next_goto = self._next_action_in_rule(target_rule, first_intent_index)
         if actions:
             output.extend(self._execute_actions(actions))
@@ -193,8 +187,8 @@ class FirstAidBot:
 
 
 def run_bot():
-    bot = FirstAidBot()
-    print("Bot Pierwszej Pomocy uruchomiony. Wpisz 'exit' aby zakończyć.\n")
+    bot = DialogueControl()
+    print("Bot uruchomiony. Wpisz 'exit' aby zakończyć.\n")
 
     start_msg = bot.start_conversation()
     print(f"Bot > {start_msg}")

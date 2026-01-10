@@ -7,7 +7,7 @@ from export_to_mobile import export_project
 from server import start_server
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="First Aid Bot CLI")
+    parser = argparse.ArgumentParser(description="Conversational Bot Builder CLI")
     parser.add_argument("command", choices=["train", "nlu", "run", "init", "export", "start_server"], help="Komenda do wykonania")
     
     args = parser.parse_args()

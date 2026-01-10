@@ -1,16 +1,15 @@
 import os
 import json
-from common import BASE_PATH, NLU_DATA_PATH, FLOW_CONFIG_PATH, MODEL_SAVE_PATH
-from nlu_train import load_nlu_from_yaml
+from common import BASE_PATH, FLOW_CONFIG_PATH, MODEL_SAVE_PATH
 import yaml
-from run_bot import FirstAidBot
+from run_bot import DialogueControl
 import shutil
 from setfit.exporters.onnx import export_onnx
 
 def export_project():
-    print("--- Rozpoczynanie eksportu SetFit do ONNX ---")
+    print("Rozpoczynanie eksportu SetFit do ONNX")
     
-    bot = FirstAidBot()
+    bot = DialogueControl()
     if not bot.model:
         print("BŁĄD: Nie znaleziono wytrenowanego modelu! Uruchom 'train'.")
         return
@@ -26,7 +25,7 @@ def export_project():
         opset=18,
         output_path=output_onnx_path
     )
-    print(f"Sukces! Pełny model wyeksportowany do: {output_onnx_path}")
+    print(f"Sukces! Model wyeksportowany do: {output_onnx_path}")
 
     tokenizer_files = ["tokenizer.json", "tokenizer_config.json", "special_tokens_map.json", "vocab.txt"]
     for file_name in tokenizer_files:
@@ -44,4 +43,4 @@ def export_project():
     with open(os.path.join(export_folder, "app_config.yml"), 'w', encoding='utf-8') as f:
         yaml.dump(flow_data, f, allow_unicode=True, sort_keys=False)
 
-    print("\n--- Eksport zakończony ---")
+    print("\nEksport zakończony")

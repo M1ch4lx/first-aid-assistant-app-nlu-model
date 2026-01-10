@@ -1,7 +1,7 @@
-from run_bot import FirstAidBot
+from run_bot import DialogueControl
 
 def run_nlu():
-    bot = FirstAidBot()
+    bot = DialogueControl()
     print("Tryb NLU (wpisz 'exit' aby wyjść):")
     while True:
         text = input("User > ")
