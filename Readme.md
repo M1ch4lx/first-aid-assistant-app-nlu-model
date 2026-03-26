@@ -1,35 +1,29 @@
-# Uniwersalne narzędzie do implementacji backendu systemu konwersacyjnego
+# Universal Tool for Implementing a Conversational System Backend
 
-## Wymagania
+## Requirements
 
 - Python 3.11
-- Conda / UV (Opcjonalne)
+- Conda / UV (Optional)
 
-## Instalacja bibliotek
+## Installing Libraries
 
-Python Venv / Conda: `pip install -r requirements.txt`\
-UV: `uv pip install -r requirements.txt`
+For Python Venv or Conda: `run pip install -r requirements.txt`
+For UV: run `uv pip install -r requirements.txt`
 
-## Aplikacja asystenta pierwszej pomocy
+## First Aid Assistant Application
 
-Zaimplementowane narzędzie nie ogranicza się jedynie do zaimplementowania usługi sieciowej dla aplikacji asystenta pierwszej pomocy. Możliwe jest tworzenie za jego pomocą systemów konwersacyjnych o dowolnym zastosowaniu.
+This tool is not limited to just creating a web service for a first aid assistant. It can be used to build conversational systems for any purpose.
 
-W katalogu głównym projektu znajduje się katalog `bot`, w który znajdują się pliki asystenta do udzielania pierwszej pomocy zbudowanego za pomocą tego narzędzia.
+In the root directory of the project, there is a `bot` folder containing the assistant files for the first aid assistant built with this tool.
 
-W celu uruchomienia usługi webowej, z której będzie korzystać aplikacja, wystarczy w katalogu głównym wykonać polecenie: `python bot.py start_server`.
+To start the web service that the application will use, simply run the command `python bot.py start_server` in the root directory.
 
-## Budowanie własnego systemu konwersacyjnego
+## Building Your Own Conversational System
 
-1. Z katalogu głównego należy usunąć katalog `bot` (jeżeli istnieje).
-
-2. Utworzenie nowego projektu: `python bot.py init`.
-
-3. Pliki z rozszerzeniem `.yml` definiują działanie systemu.
-
-4. Po każdym zmodyfikowaniu pliku `nlu.yml` należy wykonać trening modelu NLU poleceniem `python bot.py train`.
-
-5. Aby przetestować samą klasyfikacje intencji, czyli sam model NLU, można użyć polecenia `python bot.py nlu`.
-
-6. Aby przetestować lokalnie jak działa utworzony system, należy skorzystać z komendy `python bot.py run`.
-
-7. Jeżeli system działa zgodnie z oczekiwaniami można go uruchomić na serwerze poleceniem `python bot.py start_server`.
+1. Remove the `bot` folder from the root directory (if it exists).
+2. Create a new project by running `python bot.py init`.
+3. Files with the `.yml` extension define the behavior of the system.
+4. After modifying the `nlu.yml` file, train the NLU model by running `python bot.py train`.
+5. To test only the intent classification (the NLU model itself), use `python bot.py nlu`.
+6. To test the system locally, run `python bot.py run`.
+7. If the system works as expected, you can run it on a server by executing `python bot.py start_server`.
